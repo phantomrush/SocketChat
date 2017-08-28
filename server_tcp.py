@@ -14,11 +14,11 @@ print "Socket successfully created"
 # reserve a port on your computer in our
 port = 12345                
 numberOfClients = 0
+hostName = '0.0.0.0'
 
 def setting_server():
-    s.bind(('', port))
+    s.bind((hostName, port))
     print "socket binded to %s" %(port)
-
     # put the socket into listening mode
     s.listen(2)
     print "socket is listening"
@@ -46,10 +46,10 @@ def message_receiver():
     while True:
         #receiving messages from client
         ready_to_read, ready_to_write, in_error = select.select(c, [], [])
-
         for messager in ready_to_read:
             m = messager.recv(bufferinglen)
             print 'Client ', messager, ' : ', m
+
 
 setting_server()
 clients_listener(2)
