@@ -9,16 +9,19 @@ port = 12345
 ipconfig = socket.gethostbyname(socket.gethostname())
 
 # connect to the server on local computer
+username = "Vaishali"
+connecting_message = username
+ending_message = 'Bye'
 s.connect((ipconfig, port))
-s.send('Hi! I am client!!!')
+s.send(connecting_message.encode())
 toclose = False
 while True:
-    send_msg = raw_input('Client1 : ')#type in messages to send to server
-    s.send(send_msg)
+    send_msg = input('Me : ')#type in messages to send to server
+    s.send(send_msg.encode())
     # close the connection
     if 'bye' in send_msg:
         toclose = True
-        s.send('bye')
+        s.send(ending_message.encode())
         s.close()
         break
     if toclose:
