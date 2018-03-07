@@ -14,6 +14,8 @@ clients_d = {}
 # reserve a port on your computer in our
 port = 12345                
 numberOfClients = 0
+maxClients = 2
+clientsLeft = 0
 hostName = '0.0.0.0'
 
 def setting_server():
@@ -43,22 +45,39 @@ def clients_listener(amount):
     print( 'All online' )
 
 def message_receiver():
+    global clientsLeft
     while True:
+            if clientsLeft == maxClients:
+                print('Closing chat')
+                break
         #receiving messages from client
-        ready_to_read, ready_to_write, in_error = select.select(c, [], [])
-        for messager in ready_to_read:
-            m = messager.recv(bufferinglen).decode()
-            peerName =  messager.getpeername()[1]
-            if peerName not in clients_d:
-                clients_d[ peerName] = m
-                #print(clients_d[messager.addr[1]], ' : ', m)
-            else:
-                print( clients_d[ peerName], ' : ', m )
+        #try:
+
+            ready_to_read, ready_to_write, in_error = select.select(c, [], [])
+            for messager in ready_to_read:
+                try:
+                    m = messager.recv(bufferinglen).decode()
+                except:
+                    print( clients_d[messager.addr[1]],'left')
+                    c.remove(messager)
+                    clientsLeft+=1
+                    continue
+
+                peerName =  messager.getpeername()[1]
+                if peerName not in clients_d:
+                    clients_d[ peerName] = m
+                    #print(clients_d[messager.addr[1]], ' : ', m)
+                else:
+                    print( clients_d[ peerName], ' : ', m )
+        # except:
+        #     print('1')
+        #     c.remove(messager)
+        #     messager.close()
 
 
 setting_server()
-clients_listener(2)
+clients_listener(maxClients)
 message_receiver()
 
-for i in len(c):
+for i in range(len(c)):
     c[i].close()
