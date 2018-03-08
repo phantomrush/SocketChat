@@ -28,21 +28,23 @@ class client:
                 print(a)
             except:
                 print(end='')
+                break
 
     def send_messages(self):
         toclose = False
         while True:
-            send_msg = input('Me : '),  # type in messages to send to server
+            send_msg = input('Me : ')  # type in messages to send to server
             print(end='\r')
             self.s.send(send_msg.encode())
             # close the connection
-            if self.ending_message in send_msg:
+            if 'bye' == send_msg:
                 toclose = True
                 self.s.send(self.ending_message.encode())
                 self.s.close()
                 break
-
-        return
+            if toclose:
+                break
+        self.s.close()
 
 
 #self,username,port
