@@ -1,6 +1,7 @@
 # first of all import the socket library
 import socket
 import select
+import threading
 
 # next create a socket object
 s = socket.socket()
@@ -44,36 +45,38 @@ def clients_listener(amount):
         numberOfClients+=1
     print( 'All online' )
 
+def send_message(client,message):
+    clientMessageSend = clients_d[client.getpeername()[1]] + ' : ' + message
+    for j in c:
+        if j!=client:
+            j.send(clientMessageSend.encode())
+
 def message_receiver():
     global clientsLeft
+    lastPeer = ""
+    lastMessage = ""
     while True:
-            if clientsLeft == maxClients:
-                print('Closing chat')
-                break
-        #receiving messages from client
-        #try:
+        if clientsLeft == maxClients:
+            print('Closing chat')
+            break
+    #receiving messages from client
 
-            ready_to_read, ready_to_write, in_error = select.select(c, [], [])
-            for messager in ready_to_read:
-                try:
-                    m = messager.recv(bufferinglen).decode()
-                except:
-                    print( clients_d[messager.addr[1]],'left')
-                    c.remove(messager)
-                    clientsLeft+=1
-                    continue
-
-                peerName =  messager.getpeername()[1]
-                if peerName not in clients_d:
-                    clients_d[ peerName] = m
-                    #print(clients_d[messager.addr[1]], ' : ', m)
-                else:
-                    print( clients_d[ peerName], ' : ', m )
-        # except:
-        #     print('1')
-        #     c.remove(messager)
-        #     messager.close()
-
+        ready_to_read, ready_to_write, in_error = select.select(c, [], [])
+        for messager in ready_to_read:
+            peerName = messager.getpeername()[1]
+            try:
+                m = messager.recv(bufferinglen).decode()
+            except:
+                print( clients_d[ peerName],'left')
+                c.remove(messager)
+                clientsLeft+=1
+                continue
+            if peerName not in clients_d:
+                clients_d[ peerName] = m
+            else:
+                print( clients_d[ peerName], ' : ', m )
+                t = threading.Thread(target=send_message(messager,m))
+                t.start()
 
 setting_server()
 clients_listener(maxClients)

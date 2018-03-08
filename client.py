@@ -12,7 +12,7 @@ class client:
         self.port = port
         self.username = username
         self.connecting_message = username
-        self.ending_message = 'Bye'
+        self.ending_message = 'bye'
 
     def connect_client(self):
         # connect to the server on local computer
@@ -22,24 +22,27 @@ class client:
 
     def receive_messages(self):
         while True:
-            receive_data_server = self.s.recv(1024)
-            a = receive_data_server.decode("utf-8")
-            print(a)
+            try:
+                receive_data_server = self.s.recv(1024)
+                a = receive_data_server.decode("utf-8")
+                print(a)
+            except:
+                print(end='')
 
     def send_messages(self):
         toclose = False
         while True:
-            send_msg = input('Me : ')  # type in messages to send to server
+            send_msg = input('Me : '),  # type in messages to send to server
+            print(end='\r')
             self.s.send(send_msg.encode())
             # close the connection
-            if 'bye' == send_msg:
+            if self.ending_message in send_msg:
                 toclose = True
                 self.s.send(self.ending_message.encode())
                 self.s.close()
                 break
-            if toclose:
-                break
-        self.s.close()
+
+        return
 
 
 #self,username,port
