@@ -1,5 +1,6 @@
 # Import socket module
 import socket
+import os
 
 # Create a socket object
 class client:
@@ -33,6 +34,6 @@ class client:
         self.s.close()
 
 #self,username,port
-USER = input("Enter username: ")
+USER = os.getlogin()
 meClient = client(USER,12345)
 meClient.connect_client()
