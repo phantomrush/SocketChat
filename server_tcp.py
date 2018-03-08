@@ -84,3 +84,5 @@ message_receiver()
 
 for i in range(len(c)):
     c[i].close()
+
+#TODO chat history in clients on new lines

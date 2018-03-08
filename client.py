@@ -27,14 +27,15 @@ class client:
                 a = receive_data_server.decode("utf-8")
                 print(a)
             except:
-                print(end='')
+                #print(end='')
+                #sos.system('cls')
                 break
 
     def send_messages(self):
         toclose = False
         while True:
             send_msg = input('Me : ')  # type in messages to send to server
-            print(end='\r')
+            #print(end='\r')
             self.s.send(send_msg.encode())
             # close the connection
             if 'bye' == send_msg:
