@@ -12,11 +12,12 @@ class client:
         self.port = port
         self.username = username
         self.connecting_message = username
-        self.ending_message = ''
+        self.ending_message = 'bye'
 
     def connect_client(self):
         # connect to the server on local computer
         ipconfig = socket.gethostbyname(socket.gethostname())
+        print(ipconfig)
         self.s.connect((ipconfig, self.port))
         self.s.send(self.connecting_message.encode())
 
@@ -27,14 +28,15 @@ class client:
                 a = receive_data_server.decode("utf-8")
                 print(a)
             except:
-                print(1)
-                print(end='')
+                #print(end='')
+                #sos.system('cls')
                 break
 
     def send_messages(self):
         toclose = False
         while True:
-            send_msg = input('Me : ')  # type in messages to send to server
+            send_msg = input()  # type in messages to send to server
+            #print(end='\r')
             self.s.send(send_msg.encode())
             # close the connection
             if 'bye' == send_msg:

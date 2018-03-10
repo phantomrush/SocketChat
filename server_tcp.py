@@ -27,7 +27,6 @@ def setting_server():
     print( "socket is listening" )
 
 
-
 def clients_listener(amount):
     global acceptor
     global numberOfClients
