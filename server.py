@@ -29,10 +29,10 @@ class Server:
         token = self.token_generator(tok)
         print("Token is : ",token)
         self.s.bind((self.hostName, self.port))
-        print( "socket binded to %s" %(self.port) )
+        #print( "socket binded to %s" %(self.port) )
         # put the socket into listening mode
         self.s.listen(self.maxClients)
-        print( "socket is listening" )
+        print( "Get Started with SocketChat" )
 
     def clients_listener(self,amount):
         # a forever loop until we interrupt it or

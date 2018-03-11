@@ -18,7 +18,7 @@ class client:
     def connect_client(self,token):
         # connect to the server on local computer
         ipconfig = self.connect_token(token)
-        print(ipconfig)
+        #print(ipconfig)
         self.s.connect((ipconfig, self.port))
         self.s.send(self.connecting_message.encode())
 

@@ -1,6 +1,7 @@
 # Import socket module
 import socket
-import os
+#import os
+import getpass
 import threading
 # Create a socket object
 class client:
@@ -14,10 +15,10 @@ class client:
         self.connecting_message = username
         self.ending_message = 'bye'
 
-    def connect_client(self):
+    def connect_client(self,token):
         # connect to the server on local computer
-        ipconfig = socket.gethostbyname(socket.gethostname())
-        print(ipconfig)
+        ipconfig = self.connect_token(token)
+        #print(ipconfig)
         self.s.connect((ipconfig, self.port))
         self.s.send(self.connecting_message.encode())
 
@@ -48,11 +49,25 @@ class client:
                 break
         self.s.close()
 
+    def connect_token(self,token):
+        tok = token[2:]
+        l = len(tok)
+        ip = ""
+        for i in range(0,l,2):
+            n = ord(tok[i])-65
+            d = ord(tok[i+1])-97
+            num = 26*n + d
+            ip+=str(num) + '.'
+        ip = ip[0:len(ip)-1]
+        print(ip)
+        return ip
+
 
 #self,username,port
-USER = 'User2'
+USER = getpass.getuser()
+token = input("Enter token : ")
 meClient = client(USER,12345)
-meClient.connect_client()
+meClient.connect_client(token)
 send_thread = threading.Thread(target=meClient.send_messages)
 receive_thread = threading.Thread(target=meClient.receive_messages)
 threads = [send_thread,receive_thread]
