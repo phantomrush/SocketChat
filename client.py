@@ -59,7 +59,7 @@ class client:
             num = 26*n + d
             ip+=str(num) + '.'
         ip = ip[0:len(ip)-1]
-        print(ip)
+        #print(ip)
         return ip
 
 
