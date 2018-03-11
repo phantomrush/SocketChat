@@ -24,7 +24,7 @@ class Server:
 
     def setting_server(self):
         tok = socket.gethostbyname(socket.gethostname())
-        print(tok)
+        #print(tok)
         tok = tok.split('.')
         token = self.token_generator(tok)
         print("Token is : ",token)
